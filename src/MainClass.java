@@ -51,10 +51,10 @@ public class MainClass {
                         getCustomerReservationRotuine();
                         break;
                     case "3":
-                        createNewCustomer(scan);
+                        createNewCustomer();
                         break;
                     case "4":
-                        adminFlow(scan);
+                        adminFlow();
                         break;
                     case "5":
                         run = false;
@@ -96,8 +96,10 @@ public class MainClass {
         Scanner scan = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
         sdf.setLenient(false);
-
         Date checkInDate, checkOutDate;
+        IRoom reservationRoom = null;
+        String email = null;
+        Customer customer = null;
         boolean run = true;
         while(run){
             try{
@@ -113,6 +115,58 @@ public class MainClass {
                 for(IRoom room : rooms){
                     System.out.println(room);
                 }
+                if(rooms.isEmpty()){
+                    System.out.println("No Avialbale Room");
+                    break;
+                }
+                System.out.println("Please choose a room number");
+                run = true;
+                while(run){
+                    try {
+                        String roomNum = scan.nextLine();
+
+                        for(IRoom room : rooms){
+                            if(roomNum.compareTo(room.getRoomNumber()) == 0){
+                                reservationRoom = room;
+                                run =false;
+                                break;
+                            }
+                        }
+                        if(run != false){
+                            throw new IllegalArgumentException();
+                        }
+                    }catch (Exception ex){
+                        System.out.println("Please entre a valid room number");
+                    }
+                }
+                while(true){
+                    System.out.println("Do you have account wiht us? y/n");
+                    String option = scan.nextLine();
+                    if(option.compareTo("y") != 0 && option.compareTo("n") != 0){
+                        System.out.println("please entre y/n");
+                        continue;
+                    }
+                    else{
+                        if(option.compareTo("y") == 0){
+                            while(true) {
+                                System.out.println("Please Entre your email.");
+                                email = scan.nextLine();
+                                if (Customer.isValidEmail(email)) {
+                                    break;
+                                } else {
+                                    System.out.print("Please entre a valid email formate..someone@domain.com");
+                                }
+                            }
+                        }else{
+                            createNewCustomer();
+                        }
+                        customer = CustomerServiceClass.getCustomer(email);
+                        ReservationService.reserveRoom(customer,reservationRoom,checkInDate,checkOutDate);
+                        System.out.println("Your Reservation added Successfully!!");
+                        break;
+                    }
+                }
+
                 break;
             }
             catch(Exception e)
@@ -125,7 +179,8 @@ public class MainClass {
 
     }
 
-    private static void adminFlow(Scanner scan) {
+    private static void adminFlow() {
+        Scanner scan = new Scanner(System.in);
         while(true){
             for(String option : AdminMenuOptions){
                 System.out.println(option);
@@ -239,7 +294,9 @@ public class MainClass {
         ReservationService.addRoom(room);
     }
 
-    private static void createNewCustomer(Scanner scan){
+    private static void createNewCustomer(){
+        Scanner scan = new Scanner(System.in);
+
         while(true){
             System.out.println("Entre email formate someone@domain.com");
             String email = scan.nextLine();
