@@ -13,11 +13,15 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
 
-        if(!pattern.matcher(email).matches()){
+        if(!isValidEmail(email)){
             throw new IllegalArgumentException("please entre a valid email address ex someone@domain.com");
+        }else{
+            this.email = email;
         }
     }
-
+    public static boolean isValidEmail(String email){
+        return pattern.matcher(email).matches();
+    }
     @Override
     public String toString() {
         return "Customer{" +

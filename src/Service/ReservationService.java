@@ -3,6 +3,7 @@ package Service;
 import mdole.Customer;
 import mdole.IRoom;
 import mdole.Reservation;
+import mdole.Room;
 
 import java.util.*;
 
@@ -15,22 +16,40 @@ public class ReservationService {
 
     public static void addRoom(IRoom room){
         rooms.add(room);
+        mapOfRooms.put(room.getRoomNumber(),room);
     }
+
     public static IRoom getARoom(String roomId){
         return mapOfRooms.get(roomId);
     }
 
     static public Reservation reserveRoom(Customer customer, IRoom room, Date checkInDate , Date CheckOutDate){
+        room.updateRoomState(false);
         Reservation reservation = new Reservation(customer,room,checkInDate,CheckOutDate);
         return reservation;
     }
+
+
     static public Collection<IRoom> getAllRooms(){
         return rooms;
     }
-/*
-    public Collection<IRoom> findRooms(Date checkInDate,Date checkOutDate){
+
+    public static Collection<IRoom> findRooms(Date checkInDate,Date checkOutDate){
+        List<IRoom> availableRooms = new ArrayList<IRoom>();
+        for(Reservation reservation : reservations){
+            if(reservation.getCheckInDate().compareTo(checkInDate) <= 0  && reservation.getCheckOutDate().compareTo(checkOutDate) >= 0){
+                availableRooms.add(reservation.getRoom());
+            }
+        }
+        for(IRoom room : rooms){
+            if(room.isFree()){
+                availableRooms.add(room);
+            }
+        }
+        return availableRooms;
     }
-*/
+
+
     static public Collection<Reservation> getCustomerReservation(Customer customer){
         List<Reservation> customerReservations = new ArrayList<Reservation>();
 
