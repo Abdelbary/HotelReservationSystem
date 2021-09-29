@@ -1,6 +1,6 @@
 package api;
 
-import Service.CustomerServiceClass;
+import Service.CustomerService;
 import Service.ReservationService;
 import mdole.Customer;
 import mdole.IRoom;
@@ -9,7 +9,7 @@ import java.util.Collection;
 
 public class AdminResource {
     public Customer getCustomer(String email){
-        return CustomerServiceClass.getCustomer(email);
+        return CustomerService.getCustomer(email);
     }
 
     public void addRoom(IRoom room){
@@ -21,10 +21,20 @@ public class AdminResource {
     }
 
     public Collection<Customer> getAllCustomers(){
-        return CustomerServiceClass.getAllCustomers();
+        return CustomerService.getAllCustomers();
     }
 
     public void displayAllReservations(){
-        ReservationService.PrintAllReservations();
+        ReservationService.printAllReservations();
+    }
+
+    public boolean IsRoomReserved(String roomId){
+        IRoom room = ReservationService.getARoom(roomId);
+        if(room !=null){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

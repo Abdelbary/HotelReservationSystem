@@ -4,7 +4,7 @@ import mdole.Customer;
 
 import java.util.*;
 
-public class CustomerServiceClass {
+public class CustomerService {
     static List<Customer> customers = new ArrayList<Customer>();
     static Map<String,Customer> mapOfCustomers = new HashMap<String,Customer>();
 
@@ -20,11 +20,11 @@ public class CustomerServiceClass {
         }
 
     }
-    static public Customer getCustomer(String customerEmail){
+    public static  Customer getCustomer(String customerEmail){
         return mapOfCustomers.get(customerEmail);
     }
 
-    static public Collection<Customer> getAllCustomers(){
+    public static  Collection<Customer> getAllCustomers(){
         return customers;
     }
 }

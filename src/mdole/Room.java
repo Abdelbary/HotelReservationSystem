@@ -1,10 +1,10 @@
 package mdole;
 
 public class Room implements IRoom{
-    String roomNumber;
-    Double price;
-    RoomType enumeration;
-    boolean free;
+    private String roomNumber;
+    private Double price;
+    private RoomType enumeration;
+    private boolean free;
 
     public Room(String roomNumber, Double price, RoomType enumeration) {
         this.roomNumber = roomNumber;
