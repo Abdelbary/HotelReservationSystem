@@ -7,7 +7,20 @@ import mdole.Room;
 
 import java.util.*;
 
-public class ReservationService {
+public final class ReservationService {
+    private static ReservationService INSTANCE;
+
+    private ReservationService() {
+    }
+
+    public static ReservationService getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new ReservationService();
+        }
+
+        return INSTANCE;
+    }
+
     private  static List<IRoom> rooms = new ArrayList<IRoom>();
     private static Map<String,IRoom> mapOfRooms = new HashMap<String,IRoom>();
 
@@ -42,11 +55,14 @@ public class ReservationService {
                 availableRooms.add(reservation.getRoom());
             }
         }
-        for(IRoom room : rooms){
-            if(room.isFree()){
-                availableRooms.add(room);
+        int counter =0 ;
+        while(counter < rooms.size()){
+            if(rooms.get(counter).isFree()){
+                availableRooms.add(rooms.get(counter));
             }
+            counter++;
         }
+
         return availableRooms;
     }
 

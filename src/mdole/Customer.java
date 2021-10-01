@@ -33,10 +33,17 @@ public class Customer {
                 '}';
     }
     @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+    public final int hashCode() {
+        int result = 17;
 
+        if (email != null) {
+            result = 31 * result + email.hashCode();
+        }
+        else if(firstName != null && lastName != null){
+            result = 31 * result + firstName.hashCode() + lastName.hashCode();
+        }
+        return result;
+    }
     // Overriding equals() to compare two Complex objects
     @Override
     public boolean equals(Object o) {

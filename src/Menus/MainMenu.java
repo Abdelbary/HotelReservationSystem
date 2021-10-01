@@ -6,6 +6,11 @@ import mdole.IRoom;
 import mdole.Reservation;
 
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,10 +18,25 @@ import java.util.Scanner;
 
 public class MainMenu {
     private static HotelResource hotelResource = new HotelResource();
+    private static final DateTimeFormatter dateFormatter = new DateTimeFormatterBuilder()
+            .parseStrict()
+            .appendPattern("MM/dd/uuuu")
+            .toFormatter()
+            .withResolverStyle(ResolverStyle.STRICT);
 
+    public static boolean isValidDate(String date){
+        try {
+            LocalDate.parse(date,dateFormatter);
+            return true;
+        }
+        catch (Exception ex){
+            System.out.print(ex.getMessage()+"\n");
+            return false;
+        }
+    }
     public static void findAndReserveRotuine() {
         Scanner scan = new Scanner(System.in);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/uuuu");
         sdf.setLenient(false);
         Date checkInDate, checkOutDate;
         IRoom reservationRoom = null;
@@ -28,13 +48,17 @@ public class MainMenu {
                 System.out.println("Entre check in Date example 01/02/2020");
                 String input1 = scan.nextLine();
                 String input2 = scan.nextLine();
-                try{
-                    sdf.parse(input1);
-                    sdf.parse(input2);
-                }catch (Exception ex){
-                    System.out.println("Please entre a valid dates");
+                if(!isValidDate(input1) || !isValidDate(input2)){
+
                     continue;
                 }
+//                try{
+//                    sdf.parse(input1);
+//                    sdf.parse(input2);
+//                }catch (Exception ex){
+//                    System.out.println("Please entre a valid dates");
+//                    continue;
+//                }
 
                 checkInDate = new SimpleDateFormat("dd/mm/yyyy").parse(input1);
                 checkOutDate = new SimpleDateFormat("dd/mm/yyyy").parse(input2);
